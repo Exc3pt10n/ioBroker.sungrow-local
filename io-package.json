@@ -1,0 +1,71 @@
+{
+  "common": {
+    "name": "sungrow-cloud",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "Initial version",
+        "de": "Erste Version"
+      }
+    },
+    "titleLang": {
+      "en": "Sungrow iSolarCloud",
+      "de": "Sungrow iSolarCloud"
+    },
+    "desc": {
+      "en": "Reads Sungrow inverters via the iSolarCloud cloud API",
+      "de": "Liest Sungrow Wechselrichter über die iSolarCloud Cloud-API aus"
+    },
+    "authors": ["Sebastian <kontakt@jansesoft.de>"],
+    "keywords": ["sungrow", "isolarcloud", "solar", "pv", "inverter"],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "icon": "sungrow-cloud.png",
+    "enabled": true,
+    "extIcon": "",
+    "readme": "",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "energy",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "adminUI": { "config": "json" },
+    "dependencies": [{ "js-controller": ">=5.0.19" }],
+    "globalDependencies": [{ "admin": ">=6.0.0" }]
+  },
+  "encryptedNative": ["password", "accessKey"],
+  "protectedNative": ["password", "accessKey"],
+  "native": {
+    "server": "eu",
+    "appKey": "",
+    "accessKey": "",
+    "rsaKey": "",
+    "username": "",
+    "password": "",
+    "interval": 300,
+    "readInverters": true
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": { "name": "Information" },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Verbunden mit iSolarCloud",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
+}

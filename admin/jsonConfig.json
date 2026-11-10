@@ -1,0 +1,91 @@
+{
+  "type": "panel",
+  "i18n": false,
+  "items": {
+    "_hdrAccount": {
+      "type": "header",
+      "text": "iSolarCloud Konto",
+      "size": 3,
+      "newLine": true
+    },
+    "server": {
+      "type": "select",
+      "label": "Server / Region",
+      "options": [
+        { "label": "Europa (gateway.isolarcloud.eu)", "value": "eu" },
+        { "label": "International (gateway.isolarcloud.com.hk)", "value": "intl" },
+        { "label": "China (gateway.isolarcloud.com)", "value": "cn" },
+        { "label": "Australien (augateway.isolarcloud.com)", "value": "au" },
+        { "label": "Indien (gateway.isolarcloud.in)", "value": "in" }
+      ],
+      "xs": 12, "sm": 12, "md": 6, "lg": 4,
+      "newLine": true
+    },
+    "username": {
+      "type": "text",
+      "label": "Benutzername (iSolarCloud App)",
+      "xs": 12, "sm": 12, "md": 6, "lg": 4,
+      "newLine": true
+    },
+    "password": {
+      "type": "password",
+      "label": "Passwort",
+      "repeat": false,
+      "visible": true,
+      "xs": 12, "sm": 12, "md": 6, "lg": 4
+    },
+    "_hdrApi": {
+      "type": "header",
+      "text": "Developer-Portal Zugangsdaten (developer-api.isolarcloud.com)",
+      "size": 3,
+      "newLine": true
+    },
+    "_infoApi": {
+      "type": "staticText",
+      "text": "Im Sungrow Developer Portal eine Anwendung OHNE OAuth2.0 anlegen. Nach Freigabe stehen dort App Key, Secret Key und ggf. ein RSA Public Key.",
+      "newLine": true
+    },
+    "appKey": {
+      "type": "text",
+      "label": "App Key",
+      "xs": 12, "sm": 12, "md": 6, "lg": 4,
+      "newLine": true
+    },
+    "accessKey": {
+      "type": "password",
+      "label": "Secret Key (x-access-key)",
+      "visible": true,
+      "xs": 12, "sm": 12, "md": 6, "lg": 4
+    },
+    "rsaKey": {
+      "type": "text",
+      "label": "RSA Public Key (optional)",
+      "help": "Nur eintragen, wenn das Portal einen RSA-Schlüssel anzeigt – dann wird verschlüsselt kommuniziert",
+      "minRows": 3,
+      "maxRows": 6,
+      "xs": 12,
+      "newLine": true
+    },
+    "_hdrPoll": {
+      "type": "header",
+      "text": "Abfrage",
+      "size": 3,
+      "newLine": true
+    },
+    "interval": {
+      "type": "number",
+      "label": "Abfrageintervall (Sekunden)",
+      "help": "Die Cloud aktualisiert etwa alle 5 Minuten. Minimum 60 s.",
+      "min": 60,
+      "max": 3600,
+      "xs": 12, "sm": 6, "md": 4, "lg": 3,
+      "newLine": true
+    },
+    "readInverters": {
+      "type": "checkbox",
+      "label": "Wechselrichter-Detaildaten (Spannung, Strom, Temperatur) abrufen",
+      "xs": 12, "sm": 12, "md": 8,
+      "newLine": true
+    }
+  }
+}
