@@ -96,7 +96,7 @@
       "type": "state",
       "common": {
         "role": "indicator.connected",
-        "name": "Verbunden mit iSolarCloud",
+        "name": "Verbunden mit Wechselrichter bzw. iSolarCloud",
         "type": "boolean",
         "read": true,
         "write": false,

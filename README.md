@@ -2,7 +2,7 @@
 
 Liest Sungrow-Wechselrichter (z. B. **SG3K6-D**) aus, auf zwei Wegen:
 
-1. **Lokal (empfohlen):** Modbus TCP über den WLAN-Stick, **inklusive der AES-Verschlüsselung**, die Sungrow per Firmware-Update eingeführt hat. Nach so einem Update antworten normale Modbus-Clients (z. B. der ioBroker-Modbus-Adapter) nicht mehr, obwohl Port 502 offen ist.
+1. **Lokal (empfohlen):** Modbus TCP über den WLAN-Stick, **inklusive der AES-Verschlüsselung**, falls der Stick sie nutzt (wird automatisch erkannt). Der Adapter trennt nach jeder Abfrage, damit der Stick nicht durch eine hängende Verbindung blockiert wird.
 2. **Cloud:** über die iSolarCloud Open API (braucht Zugang zum Sungrow Developer-Portal).
 
 ## Lokaler Modus (Modbus TCP über WLAN-Stick)
