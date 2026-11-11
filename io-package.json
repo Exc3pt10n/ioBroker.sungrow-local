@@ -1,8 +1,12 @@
 {
   "common": {
-    "name": "sungrow-cloud",
-    "version": "0.2.0",
+    "name": "sungrow-local",
+    "version": "0.3.0",
     "news": {
+      "0.3.0": {
+        "en": "Renamed to sungrow-local, cloud mode removed",
+        "de": "Umbenannt in sungrow-local, Cloud-Modus entfernt"
+      },
       "0.2.0": {
         "en": "Local mode: Modbus TCP via WiFi dongle incl. Sungrow encryption",
         "de": "Lokaler Modus: Modbus TCP über WLAN-Stick inkl. Sungrow-Verschlüsselung"
@@ -13,26 +17,26 @@
       }
     },
     "titleLang": {
-      "en": "Sungrow iSolarCloud",
-      "de": "Sungrow iSolarCloud"
+      "en": "Sungrow local (Modbus TCP)",
+      "de": "Sungrow lokal (Modbus TCP)"
     },
     "desc": {
-      "en": "Reads Sungrow inverters locally via (encrypted) Modbus TCP of the WiFi dongle or via the iSolarCloud API",
-      "de": "Liest Sungrow Wechselrichter lokal über (verschlüsseltes) Modbus TCP des WLAN-Sticks oder über die iSolarCloud-API"
+      "en": "Reads Sungrow inverters locally via Modbus TCP of the WiFi dongle (incl. Sungrow encryption)",
+      "de": "Liest Sungrow Wechselrichter lokal über Modbus TCP des WLAN-Sticks aus (inkl. Sungrow-Verschlüsselung)"
     },
     "authors": [
       "Sebastian <kontakt@jansesoft.de>"
     ],
     "keywords": [
       "sungrow",
-      "isolarcloud",
+      "modbus",
       "solar",
       "pv",
       "inverter"
     ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "icon": "sungrow-cloud.png",
+    "icon": "sungrow-local.png",
     "enabled": true,
     "extIcon": "",
     "readme": "",
@@ -56,30 +60,15 @@
       }
     ]
   },
-  "encryptedNative": [
-    "password",
-    "accessKey"
-  ],
-  "protectedNative": [
-    "password",
-    "accessKey"
-  ],
+  "encryptedNative": [],
+  "protectedNative": [],
   "native": {
-    "mode": "modbus",
     "host": "",
     "port": 502,
     "unitId": 1,
     "encryption": "auto",
-    "modbusInterval": 30,
-    "keepConnection": false,
-    "server": "eu",
-    "appKey": "",
-    "accessKey": "",
-    "rsaKey": "",
-    "username": "",
-    "password": "",
-    "interval": 300,
-    "readInverters": true
+    "interval": 30,
+    "keepConnection": false
   },
   "objects": [],
   "instanceObjects": [
@@ -96,7 +85,7 @@
       "type": "state",
       "common": {
         "role": "indicator.connected",
-        "name": "Verbunden mit Wechselrichter bzw. iSolarCloud",
+        "name": "Verbunden mit Wechselrichter",
         "type": "boolean",
         "read": true,
         "write": false,

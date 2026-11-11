@@ -1,13 +1,13 @@
 {
-  "name": "iobroker.sungrow-cloud",
-  "version": "0.2.0",
-  "description": "Sungrow Wechselrichter lokal über Modbus TCP des WLAN-Sticks (inkl. Verschlüsselung) oder über die iSolarCloud-API",
+  "name": "iobroker.sungrow-local",
+  "version": "0.3.0",
+  "description": "Sungrow Wechselrichter lokal über Modbus TCP des WLAN-Sticks (inkl. Sungrow-Verschlüsselung)",
   "author": "Sebastian <kontakt@jansesoft.de>",
   "license": "MIT",
   "keywords": [
     "ioBroker",
     "sungrow",
-    "isolarcloud",
+    "modbus",
     "solar",
     "pv",
     "inverter"
@@ -26,10 +26,13 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.3",
-    "axios": "^1.7.9"
+    "@iobroker/adapter-core": "^3.2.3"
   },
   "scripts": {
-    "test": "node test/offline-test.js && node test/modbus-test.js"
+    "test": "node test/modbus-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Exc3pt10n/ioBroker.sungrow-local"
   }
 }

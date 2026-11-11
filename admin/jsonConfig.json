@@ -2,31 +2,11 @@
   "type": "panel",
   "i18n": false,
   "items": {
-    "mode": {
-      "type": "select",
-      "label": "Verbindungsart",
-      "newLine": true,
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "options": [
-        {
-          "label": "Lokal: Modbus TCP über WLAN-Stick (empfohlen)",
-          "value": "modbus"
-        },
-        {
-          "label": "Cloud: iSolarCloud API",
-          "value": "cloud"
-        }
-      ]
-    },
-    "_hdrModbus": {
+    "_hdr": {
       "type": "header",
       "text": "Modbus TCP (WLAN-Stick)",
       "size": 3,
-      "newLine": true,
-      "hidden": "data.mode === 'cloud'"
+      "newLine": true
     },
     "host": {
       "type": "text",
@@ -36,8 +16,7 @@
       "xs": 12,
       "sm": 6,
       "md": 4,
-      "lg": 3,
-      "hidden": "data.mode === 'cloud'"
+      "lg": 3
     },
     "port": {
       "type": "number",
@@ -47,8 +26,7 @@
       "xs": 6,
       "sm": 3,
       "md": 2,
-      "lg": 2,
-      "hidden": "data.mode === 'cloud'"
+      "lg": 2
     },
     "unitId": {
       "type": "number",
@@ -59,8 +37,7 @@
       "xs": 6,
       "sm": 3,
       "md": 2,
-      "lg": 2,
-      "hidden": "data.mode === 'cloud'"
+      "lg": 2
     },
     "encryption": {
       "type": "select",
@@ -70,7 +47,6 @@
       "sm": 6,
       "md": 4,
       "lg": 3,
-      "hidden": "data.mode === 'cloud'",
       "options": [
         {
           "label": "Automatisch erkennen",
@@ -86,7 +62,7 @@
         }
       ]
     },
-    "modbusInterval": {
+    "interval": {
       "type": "number",
       "label": "Abfrageintervall (Sekunden)",
       "min": 5,
@@ -94,147 +70,13 @@
       "xs": 12,
       "sm": 6,
       "md": 4,
-      "lg": 3,
-      "hidden": "data.mode === 'cloud'"
+      "lg": 3
     },
     "keepConnection": {
       "type": "checkbox",
       "label": "Verbindung offen halten (sonst nach jeder Abfrage trennen, damit andere Programme zugreifen können)",
       "newLine": true,
-      "xs": 12,
-      "hidden": "data.mode === 'cloud'"
-    },
-    "_hdrAccount": {
-      "type": "header",
-      "text": "iSolarCloud Konto",
-      "size": 3,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "server": {
-      "type": "select",
-      "label": "Server / Region",
-      "options": [
-        {
-          "label": "Europa (gateway.isolarcloud.eu)",
-          "value": "eu"
-        },
-        {
-          "label": "International (gateway.isolarcloud.com.hk)",
-          "value": "intl"
-        },
-        {
-          "label": "China (gateway.isolarcloud.com)",
-          "value": "cn"
-        },
-        {
-          "label": "Australien (augateway.isolarcloud.com)",
-          "value": "au"
-        },
-        {
-          "label": "Indien (gateway.isolarcloud.in)",
-          "value": "in"
-        }
-      ],
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "username": {
-      "type": "text",
-      "label": "Benutzername (iSolarCloud App)",
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "password": {
-      "type": "password",
-      "label": "Passwort",
-      "repeat": false,
-      "visible": true,
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "_hdrApi": {
-      "type": "header",
-      "text": "Developer-Portal Zugangsdaten (developer-api.isolarcloud.com)",
-      "size": 3,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "_infoApi": {
-      "type": "staticText",
-      "text": "Im Sungrow Developer Portal eine Anwendung OHNE OAuth2.0 anlegen. Nach Freigabe stehen dort App Key, Secret Key und ggf. ein RSA Public Key.",
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "appKey": {
-      "type": "text",
-      "label": "App Key",
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "accessKey": {
-      "type": "password",
-      "label": "Secret Key (x-access-key)",
-      "visible": true,
-      "xs": 12,
-      "sm": 12,
-      "md": 6,
-      "lg": 4,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "rsaKey": {
-      "type": "text",
-      "label": "RSA Public Key (optional)",
-      "help": "Nur eintragen, wenn das Portal einen RSA-Schlüssel anzeigt – dann wird verschlüsselt kommuniziert",
-      "minRows": 3,
-      "maxRows": 6,
-      "xs": 12,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "_hdrPoll": {
-      "type": "header",
-      "text": "Abfrage",
-      "size": 3,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "interval": {
-      "type": "number",
-      "label": "Abfrageintervall (Sekunden)",
-      "help": "Die Cloud aktualisiert etwa alle 5 Minuten. Minimum 60 s.",
-      "min": 60,
-      "max": 3600,
-      "xs": 12,
-      "sm": 6,
-      "md": 4,
-      "lg": 3,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
-    },
-    "readInverters": {
-      "type": "checkbox",
-      "label": "Wechselrichter-Detaildaten (Spannung, Strom, Temperatur) abrufen",
-      "xs": 12,
-      "sm": 12,
-      "md": 8,
-      "newLine": true,
-      "hidden": "data.mode !== 'cloud'"
+      "xs": 12
     }
   }
 }

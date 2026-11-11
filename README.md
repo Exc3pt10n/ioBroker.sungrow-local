@@ -1,102 +1,69 @@
-# ioBroker.sungrow-cloud
+# ioBroker.sungrow-local
 
-Liest Sungrow-Wechselrichter (z. B. **SG3K6-D**) aus, auf zwei Wegen:
+Liest Sungrow-String-Wechselrichter (getestet: **SG3K6-D** mit WLAN-Stick, Firmware WiFi V31_001_247) **lokal** über Modbus TCP des WLAN-Sticks aus, ganz ohne Cloud.
 
-1. **Lokal (empfohlen):** Modbus TCP über den WLAN-Stick, **inklusive der AES-Verschlüsselung**, falls der Stick sie nutzt (wird automatisch erkannt). Der Adapter trennt nach jeder Abfrage, damit der Stick nicht durch eine hängende Verbindung blockiert wird.
-2. **Cloud:** über die iSolarCloud Open API (braucht Zugang zum Sungrow Developer-Portal).
+- Erkennt automatisch, ob der Stick die AES-Verschlüsselung neuerer Sungrow-Firmware nutzt, und spricht dann verschlüsselt.
+- Trennt nach jeder Abfrage, weil die Sticks oft nur **eine** Verbindung gleichzeitig zulassen. Eine hängende Verbindung blockiert sonst alle weiteren.
 
-## Lokaler Modus (Modbus TCP über WLAN-Stick)
+## Installation
 
-### Schnelltest ohne ioBroker
+In der ioBroker-Admin-Oberfläche: *Adapter → „Benutzerdefiniert installieren“ → GitHub* mit
+`https://github.com/Exc3pt10n/ioBroker.sungrow-local`. Danach eine Instanz anlegen.
 
-Auf einem Rechner mit Node.js (z. B. dem ioBroker-Host), **bei Tageslicht**. Nachts ist der Wechselrichter aus und antwortet nicht.
-
-```bash
-git clone https://github.com/Exc3pt10n/ioBroker.sungrow-cloud.git
-cd ioBroker.sungrow-cloud
-node tools/test-dongle.js 192.168.178.167
-```
-
-Optional: Slave-ID und Verschlüsselung angeben, z. B. `node tools/test-dongle.js 192.168.178.167 1 on`.
-
-### Konfiguration
+## Konfiguration
 
 | Feld | Bedeutung |
 |---|---|
-| Verbindungsart | „Lokal: Modbus TCP über WLAN-Stick“ |
-| IP-Adresse | IP des Sticks. Im Router fest zuweisen. |
+| IP-Adresse | IP des WLAN-Sticks. Im Router fest zuweisen. |
 | Port / Slave-ID | 502 / 1 |
-| Verschlüsselung | „Automatisch“ erkennt per Schlüssel-Handshake, ob der Stick verschlüsselt. |
+| Verschlüsselung | „Automatisch erkennen“ (Standard), „Immer verschlüsselt“ oder „Aus“ |
 | Abfrageintervall | Standard 30 s |
-| Verbindung offen halten | Aus: Der Adapter trennt nach jeder Abfrage, weil der Stick oft nur eine Verbindung gleichzeitig erlaubt. |
+| Verbindung offen halten | Standard aus. Nur einschalten, wenn kein anderes Programm auf den Stick zugreift. |
 
-### Datenpunkte (lokal)
+Es darf kein anderer Modbus-Client gleichzeitig auf den Stick zugreifen, z. B. der ioBroker-Modbus-Adapter oder evcc.
 
-`sungrow-cloud.0.inverter.*`: `activePower`, `dcPower`, `dailyYield`, `totalYield`, `mppt1Voltage/Current`, `mppt2Voltage/Current`, `gridVoltage`, `gridCurrent`, `gridFrequency`, `temperature`, `powerFactor`, `reactivePower`, `runningTime`, `workState`/`workStateText`, `deviceTypeCode`, `nominalPower`.
+## Datenpunkte
 
-Die Register stammen aus Sungrows Protokoll für String-Wechselrichter, U32-Werte mit niederwertigem Wort zuerst. Die Verschlüsselung ist nach der Community-Bibliothek [SungrowModbusTcpClient](https://github.com/rpvelloso/Sungrow-Modbus) nachgebaut.
+`sungrow-local.0.inverter.*`
 
-## Cloud-Modus
+| Datenpunkt | Register | Einheit |
+|---|---|---|
+| `activePower` | 5031–5032 | W |
+| `dcPower` | 5017–5018 | W |
+| `dailyYield` | 5003 | kWh |
+| `totalYield` | 5004–5005 | kWh |
+| `mppt1Voltage` / `mppt1Current` | 5011 / 5012 | V / A |
+| `mppt2Voltage` / `mppt2Current` | 5013 / 5014 | V / A |
+| `gridVoltage` / `gridCurrent` | 5019 / 5022 | V / A |
+| `gridFrequency` | 5036 | Hz |
+| `temperature` | 5008 | °C |
+| `powerFactor` | 5035 | |
+| `reactivePower` | 5033–5034 | var |
+| `runningTime` | 5006–5007 | h |
+| `workState` / `workStateText` | 5038 | Code / Text |
+| `deviceTypeCode`, `nominalPower` | 5000, 5001 | –, kW |
 
-### Voraussetzungen: Zugang zur Sungrow-API
+Die Register stammen aus Sungrows Protokoll für String-Wechselrichter. Es sind Input-Register mit den dokumentierten Nummern; die Protokolladresse ist die Nummer minus 1. U32-Werte stehen mit dem niederwertigen Wort zuerst.
 
-Die API braucht eigene Entwickler-Zugangsdaten. Die normalen App-Zugangsdaten reichen allein nicht aus.
+Nachts ist der Wechselrichter aus und antwortet nicht. `info.connection` steht dann auf `false`, die letzten Werte bleiben erhalten.
 
-1. Auf <https://developer-api.isolarcloud.com> registrieren, mit demselben Konto wie in der iSolarCloud-App.
-2. Unter *Applications* eine neue Anwendung anlegen. **„Authorize with OAuth2.0“ NICHT aktivieren** (dieser Adapter nutzt den Login mit Benutzername und Passwort).
-3. Auf die Freigabe durch Sungrow warten. Das dauert meist 1–3 Werktage.
-4. Danach in den Details der Anwendung ablesen:
-   - **App Key**
-   - **Secret Key** (wird als `x-access-key` gesendet)
-   - ggf. **RSA Public Key**. Falls angezeigt, ebenfalls eintragen. Der Adapter verschlüsselt dann die Kommunikation (AES/RSA).
-
-### Konfiguration (Cloud)
-
-| Feld | Bedeutung |
-|---|---|
-| Server / Region | Für Deutschland: **Europa** (`gateway.isolarcloud.eu`) |
-| Benutzername / Passwort | Login der iSolarCloud-App |
-| App Key / Secret Key / RSA Key | aus dem Developer Portal |
-| Abfrageintervall | Standard 300 s. Die Cloud liefert ohnehin nur ca. alle 5 Minuten neue Werte. |
-| Wechselrichter-Detaildaten | zusätzlich MPPT-Spannungen, Ströme, Temperatur usw. |
-
-### Datenpunkte (Cloud)
-
-```
-sungrow-cloud.0.
-├── info.connection / info.lastUpdate
-└── <ps_id>                         (Anlage)
-    ├── info.*                      Name, Standort, kWp
-    ├── plant.power                 aktuelle PV-Leistung (W)
-    ├── plant.dailyYield            Ertrag heute (kWh)
-    ├── plant.totalYield            Ertrag gesamt (kWh)
-    ├── plant.loadPower / gridPower / feedInToday / purchasedToday …  (nur mit Zähler)
-    ├── plant.surplusPower          PV-Überschuss, berechnet (nur mit Zähler)
-    └── inverter_<SN>
-        ├── activePower, dcPower, dailyYield, totalYield
-        ├── mppt1Voltage/Current, mppt2Voltage/Current
-        └── gridVoltage, gridCurrent, gridFrequency, temperature
-```
-
-Ein Datenpunkt wird erst angelegt, wenn die Cloud dafür einen Wert liefert. Ohne Smart Meter (z. B. DTSU666) gibt es also keine Verbrauchs- oder Netzwerte.
-
-## Installation (ohne npm-Repository)
-
-Das Paket `iobroker.sungrow-cloud-0.2.0.tgz` auf den ioBroker-Host kopieren und dann:
+## Schnelltest ohne ioBroker
 
 ```bash
-cd /opt/iobroker
-npm install /pfad/zu/iobroker.sungrow-cloud-0.2.0.tgz
-iobroker add sungrow-cloud
+git clone https://github.com/Exc3pt10n/ioBroker.sungrow-local.git
+cd ioBroker.sungrow-local
+node tools/test-dongle.js <IP-des-Sticks> [Slave-ID] [auto|on|off]
 ```
 
-Alternativ in der Admin-Oberfläche: *Adapter → „Benutzerdefiniert installieren“* mit einem GitHub-Link, wenn das Repo dort liegt.
+## Danksagung
 
-## Bekannte Einschränkungen
+Die Verschlüsselung ist nach der Community-Bibliothek [SungrowModbusTcpClient](https://github.com/rpvelloso/Sungrow-Modbus) nachgebaut.
 
-- Cloud-Daten kommen mit 5–10 Minuten Verzögerung und fallen bei Internet- oder Sungrow-Störungen aus.
-- Die Bedeutung der Wechselrichter-Punkte (`p24` = Wirkleistung usw.) stammt aus Community-Dokumentation. Erscheint ein Wert unplausibel, bitte melden.
-- Zu häufige fehlgeschlagene Logins können das Konto vorübergehend sperren. Der Adapter verlängert deshalb nach Fehlern das Intervall auf bis zu 30 Minuten.
+## Changelog
+
+- **0.3.0:** Umbenannt von `sungrow-cloud` in `sungrow-local`, Cloud-Modus entfernt (siehe Git-Historie)
+- **0.2.0:** Lokaler Modus über Modbus TCP inkl. Sungrow-Verschlüsselung
+- **0.1.0:** Erste Version (iSolarCloud API)
 
 ## Lizenz
 
