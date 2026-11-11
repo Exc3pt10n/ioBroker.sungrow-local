@@ -1,18 +1,35 @@
 {
   "name": "iobroker.sungrow-cloud",
-  "version": "0.1.0",
-  "description": "Sungrow Wechselrichter über die iSolarCloud Cloud-API (z. B. SG3K6-D ohne lokale Schnittstelle)",
+  "version": "0.2.0",
+  "description": "Sungrow Wechselrichter lokal über Modbus TCP des WLAN-Sticks (inkl. Verschlüsselung) oder über die iSolarCloud-API",
   "author": "Sebastian <kontakt@jansesoft.de>",
   "license": "MIT",
-  "keywords": ["ioBroker", "sungrow", "isolarcloud", "solar", "pv", "inverter"],
+  "keywords": [
+    "ioBroker",
+    "sungrow",
+    "isolarcloud",
+    "solar",
+    "pv",
+    "inverter"
+  ],
   "main": "main.js",
-  "files": ["admin/", "lib/", "main.js", "io-package.json", "LICENSE", "README.md"],
-  "engines": { "node": ">=18" },
+  "files": [
+    "admin/",
+    "lib/",
+    "main.js",
+    "io-package.json",
+    "LICENSE",
+    "README.md",
+    "tools/"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^3.2.3",
     "axios": "^1.7.9"
   },
   "scripts": {
-    "test": "node test/offline-test.js"
+    "test": "node test/offline-test.js && node test/modbus-test.js"
   }
 }

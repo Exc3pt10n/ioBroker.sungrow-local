@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "sungrow-cloud",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "news": {
+      "0.2.0": {
+        "en": "Local mode: Modbus TCP via WiFi dongle incl. Sungrow encryption",
+        "de": "Lokaler Modus: Modbus TCP über WLAN-Stick inkl. Sungrow-Verschlüsselung"
+      },
       "0.1.0": {
         "en": "Initial version",
         "de": "Erste Version"
@@ -13,11 +17,19 @@
       "de": "Sungrow iSolarCloud"
     },
     "desc": {
-      "en": "Reads Sungrow inverters via the iSolarCloud cloud API",
-      "de": "Liest Sungrow Wechselrichter über die iSolarCloud Cloud-API aus"
+      "en": "Reads Sungrow inverters locally via (encrypted) Modbus TCP of the WiFi dongle or via the iSolarCloud API",
+      "de": "Liest Sungrow Wechselrichter lokal über (verschlüsseltes) Modbus TCP des WLAN-Sticks oder über die iSolarCloud-API"
     },
-    "authors": ["Sebastian <kontakt@jansesoft.de>"],
-    "keywords": ["sungrow", "isolarcloud", "solar", "pv", "inverter"],
+    "authors": [
+      "Sebastian <kontakt@jansesoft.de>"
+    ],
+    "keywords": [
+      "sungrow",
+      "isolarcloud",
+      "solar",
+      "pv",
+      "inverter"
+    ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "icon": "sungrow-cloud.png",
@@ -28,15 +40,38 @@
     "mode": "daemon",
     "type": "energy",
     "compact": true,
-    "connectionType": "cloud",
+    "connectionType": "local",
     "dataSource": "poll",
-    "adminUI": { "config": "json" },
-    "dependencies": [{ "js-controller": ">=5.0.19" }],
-    "globalDependencies": [{ "admin": ">=6.0.0" }]
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.0.0"
+      }
+    ]
   },
-  "encryptedNative": ["password", "accessKey"],
-  "protectedNative": ["password", "accessKey"],
+  "encryptedNative": [
+    "password",
+    "accessKey"
+  ],
+  "protectedNative": [
+    "password",
+    "accessKey"
+  ],
   "native": {
+    "mode": "modbus",
+    "host": "",
+    "port": 502,
+    "unitId": 1,
+    "encryption": "auto",
+    "modbusInterval": 30,
+    "keepConnection": false,
     "server": "eu",
     "appKey": "",
     "accessKey": "",
@@ -51,7 +86,9 @@
     {
       "_id": "info",
       "type": "channel",
-      "common": { "name": "Information" },
+      "common": {
+        "name": "Information"
+      },
       "native": {}
     },
     {

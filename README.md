@@ -1,8 +1,44 @@
 # ioBroker.sungrow-cloud
 
-Liest Sungrow-Wechselrichter über die **iSolarCloud Cloud-API** aus. Gedacht für Geräte ohne lokale Schnittstelle (Modbus/WiNet), z. B. den **SG3K6-D** mit WLAN-Stick.
+Liest Sungrow-Wechselrichter (z. B. **SG3K6-D**) aus, auf zwei Wegen:
 
-## Voraussetzungen: Zugang zur Sungrow-API
+1. **Lokal (empfohlen):** Modbus TCP über den WLAN-Stick, **inklusive der AES-Verschlüsselung**, die Sungrow per Firmware-Update eingeführt hat. Nach so einem Update antworten normale Modbus-Clients (z. B. der ioBroker-Modbus-Adapter) nicht mehr, obwohl Port 502 offen ist.
+2. **Cloud:** über die iSolarCloud Open API (braucht Zugang zum Sungrow Developer-Portal).
+
+## Lokaler Modus (Modbus TCP über WLAN-Stick)
+
+### Schnelltest ohne ioBroker
+
+Auf einem Rechner mit Node.js (z. B. dem ioBroker-Host), **bei Tageslicht**. Nachts ist der Wechselrichter aus und antwortet nicht.
+
+```bash
+git clone https://github.com/Exc3pt10n/ioBroker.sungrow-cloud.git
+cd ioBroker.sungrow-cloud
+node tools/test-dongle.js 192.168.178.167
+```
+
+Optional: Slave-ID und Verschlüsselung angeben, z. B. `node tools/test-dongle.js 192.168.178.167 1 on`.
+
+### Konfiguration
+
+| Feld | Bedeutung |
+|---|---|
+| Verbindungsart | „Lokal: Modbus TCP über WLAN-Stick“ |
+| IP-Adresse | IP des Sticks. Im Router fest zuweisen. |
+| Port / Slave-ID | 502 / 1 |
+| Verschlüsselung | „Automatisch“ erkennt per Schlüssel-Handshake, ob der Stick verschlüsselt. |
+| Abfrageintervall | Standard 30 s |
+| Verbindung offen halten | Aus: Der Adapter trennt nach jeder Abfrage, weil der Stick oft nur eine Verbindung gleichzeitig erlaubt. |
+
+### Datenpunkte (lokal)
+
+`sungrow-cloud.0.inverter.*`: `activePower`, `dcPower`, `dailyYield`, `totalYield`, `mppt1Voltage/Current`, `mppt2Voltage/Current`, `gridVoltage`, `gridCurrent`, `gridFrequency`, `temperature`, `powerFactor`, `reactivePower`, `runningTime`, `workState`/`workStateText`, `deviceTypeCode`, `nominalPower`.
+
+Die Register stammen aus Sungrows Protokoll für String-Wechselrichter, U32-Werte mit niederwertigem Wort zuerst. Die Verschlüsselung ist nach der Community-Bibliothek [SungrowModbusTcpClient](https://github.com/rpvelloso/Sungrow-Modbus) nachgebaut.
+
+## Cloud-Modus
+
+### Voraussetzungen: Zugang zur Sungrow-API
 
 Die API braucht eigene Entwickler-Zugangsdaten. Die normalen App-Zugangsdaten reichen allein nicht aus.
 
@@ -14,7 +50,7 @@ Die API braucht eigene Entwickler-Zugangsdaten. Die normalen App-Zugangsdaten re
    - **Secret Key** (wird als `x-access-key` gesendet)
    - ggf. **RSA Public Key**. Falls angezeigt, ebenfalls eintragen. Der Adapter verschlüsselt dann die Kommunikation (AES/RSA).
 
-## Konfiguration
+### Konfiguration (Cloud)
 
 | Feld | Bedeutung |
 |---|---|
@@ -24,7 +60,7 @@ Die API braucht eigene Entwickler-Zugangsdaten. Die normalen App-Zugangsdaten re
 | Abfrageintervall | Standard 300 s. Die Cloud liefert ohnehin nur ca. alle 5 Minuten neue Werte. |
 | Wechselrichter-Detaildaten | zusätzlich MPPT-Spannungen, Ströme, Temperatur usw. |
 
-## Datenpunkte
+### Datenpunkte (Cloud)
 
 ```
 sungrow-cloud.0.
@@ -46,11 +82,11 @@ Ein Datenpunkt wird erst angelegt, wenn die Cloud dafür einen Wert liefert. Ohn
 
 ## Installation (ohne npm-Repository)
 
-Das Paket `iobroker.sungrow-cloud-0.1.0.tgz` auf den ioBroker-Host kopieren und dann:
+Das Paket `iobroker.sungrow-cloud-0.2.0.tgz` auf den ioBroker-Host kopieren und dann:
 
 ```bash
 cd /opt/iobroker
-npm install /pfad/zu/iobroker.sungrow-cloud-0.1.0.tgz
+npm install /pfad/zu/iobroker.sungrow-cloud-0.2.0.tgz
 iobroker add sungrow-cloud
 ```
 
