@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "sungrow-local",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "news": {
+      "0.4.0": {
+        "en": "Node.js 22 or newer required (Node.js 20 is end-of-life); releases are now created automatically via GitHub Actions",
+        "de": "Node.js 22 oder neuer erforderlich (Node.js 20 wird nicht mehr unterstützt); Releases entstehen jetzt automatisch über GitHub Actions",
+        "ru": "Требуется Node.js 22 или новее (поддержка Node.js 20 прекращена); релизы теперь создаются автоматически через GitHub Actions",
+        "pt": "Requer Node.js 22 ou mais recente (o Node.js 20 deixou de ser suportado); as versões são agora criadas automaticamente através do GitHub Actions",
+        "nl": "Node.js 22 of nieuwer vereist (Node.js 20 wordt niet meer ondersteund); releases worden nu automatisch via GitHub Actions aangemaakt",
+        "fr": "Node.js 22 ou plus récent requis (Node.js 20 n’est plus pris en charge) ; les versions sont désormais créées automatiquement via GitHub Actions",
+        "it": "Richiede Node.js 22 o successivo (Node.js 20 non è più supportato); le release vengono ora create automaticamente tramite GitHub Actions",
+        "es": "Se requiere Node.js 22 o posterior (Node.js 20 ya no tiene soporte); las versiones se crean ahora automáticamente mediante GitHub Actions",
+        "pl": "Wymagany Node.js 22 lub nowszy (Node.js 20 nie jest już wspierany); wydania są teraz tworzone automatycznie przez GitHub Actions",
+        "uk": "Потрібен Node.js 22 або новіший (підтримку Node.js 20 припинено); релізи тепер створюються автоматично через GitHub Actions",
+        "zh-cn": "需要 Node.js 22 或更高版本（Node.js 20 已停止支持）；版本现在通过 GitHub Actions 自动发布"
+      },
       "0.3.0": {
         "en": "Renamed to sungrow-local, cloud mode removed",
         "de": "Umbenannt in sungrow-local, Cloud-Modus entfernt"

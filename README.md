@@ -5,6 +5,11 @@ Liest Sungrow-String-Wechselrichter (getestet: **SG3K6-D** mit WLAN-Stick, Firmw
 - Erkennt automatisch, ob der Stick die AES-Verschlüsselung neuerer Sungrow-Firmware nutzt, und spricht dann verschlüsselt.
 - Trennt nach jeder Abfrage, weil die Sticks oft nur **eine** Verbindung gleichzeitig zulassen. Eine hängende Verbindung blockiert sonst alle weiteren.
 
+## Voraussetzungen
+
+- ioBroker mit js-controller ≥ 5.0.19 und Admin ≥ 6
+- Node.js 22 oder neuer
+
 ## Installation
 
 In der ioBroker-Admin-Oberfläche: *Adapter → „Installieren aus eigener URL“* mit
@@ -79,9 +84,13 @@ Changelog-Abschnitt `### X.Y.Z (JJJJ-MM-TT)` mit (Details in `CLAUDE.md`). Nach 
 setzt GitHub Actions den Tag `vX.Y.Z`, legt das GitHub-Release an und aktualisiert den Branch `release`.
 
 Eine bestimmte Version installieren:
-`https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/v0.3.0`
+`https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/v0.4.0`
 
 ## Changelog
+### 0.4.0 (2026-11-14)
+* (Sebastian) **Breaking:** Node.js 22 oder neuer erforderlich (Node.js 20 wird nicht mehr unterstützt)
+* (Sebastian) Releases entstehen jetzt automatisch über GitHub Actions; stabile Installation über `tarball/release`
+
 ### 0.3.0 (2026-11-11)
 * (Sebastian) **Breaking:** Umbenannt von `sungrow-cloud` in `sungrow-local`, Cloud-Modus entfernt (siehe Git-Historie)
 
