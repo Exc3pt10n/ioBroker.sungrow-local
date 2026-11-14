@@ -7,8 +7,12 @@ Liest Sungrow-String-Wechselrichter (getestet: **SG3K6-D** mit WLAN-Stick, Firmw
 
 ## Installation
 
-In der ioBroker-Admin-Oberfläche: *Adapter → „Benutzerdefiniert installieren“ → GitHub* mit
-`https://github.com/Exc3pt10n/ioBroker.sungrow-local`. Danach eine Instanz anlegen.
+In der ioBroker-Admin-Oberfläche: *Adapter → „Installieren aus eigener URL“* mit
+
+- `https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/release` (letztes Release, empfohlen) oder
+- `https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/main` (Entwicklungsstand).
+
+Danach eine Instanz anlegen.
 
 ## Konfiguration
 
@@ -68,26 +72,16 @@ npm test                 # Unit-Tests + Paketprüfung
 npm run test:integration # Startet den Adapter in einer Test-ioBroker-Instanz (mit simuliertem WLAN-Stick)
 ```
 
-### Release erstellen
+### Releases
 
-1. Bei jeder Änderung, die man im Betrieb bemerkt, unter `### **WORK IN PROGRESS**` im
-   Changelog eine Zeile `* (Autor) Beschreibung` ergänzen.
-2. Auf `main` mit sauberem Arbeitsverzeichnis ausführen:
-   ```bash
-   npm run release patch   # nur Fehlerbehebungen, z. B. 0.3.0 → 0.3.1
-   npm run release minor   # neue Funktionen, z. B. 0.3.1 → 0.4.0
-   ```
-   Das Skript erhöht die Version in `package.json` und `io-package.json`, macht aus dem
-   Platzhalter einen Versionseintrag mit Datum, übersetzt die News für `io-package.json`,
-   committet, setzt den Tag `vX.Y.Z` und pusht beides. Mit `--dry` lässt es sich
-   vorher gefahrlos ausprobieren.
+Jeder Pull Request, der den Adapter im Betrieb verändert, erhöht die Version von Hand und bringt einen
+Changelog-Abschnitt `### X.Y.Z (JJJJ-MM-TT)` mit (Details in `CLAUDE.md`). Nach dem Merge auf `main`
+setzt GitHub Actions den Tag `vX.Y.Z`, legt das GitHub-Release an und aktualisiert den Branch `release`.
 
 Eine bestimmte Version installieren:
 `https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/v0.3.0`
 
 ## Changelog
-### **WORK IN PROGRESS**
-
 ### 0.3.0 (2026-11-11)
 * (Sebastian) **Breaking:** Umbenannt von `sungrow-cloud` in `sungrow-local`, Cloud-Modus entfernt (siehe Git-Historie)
 
