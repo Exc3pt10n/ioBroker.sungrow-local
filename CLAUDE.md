@@ -1,35 +1,55 @@
-# Hinweise für Claude
+# Hinweise für die Weiterentwicklung
 
-## Versionierung (bei jeder Änderung)
+## Versionierung
 
-Jede Änderung, die man im Betrieb des Adapters bemerkt (Funktion, Fehlerbehebung,
-geänderte oder entfernte Datenpunkte, Einstellungen), bekommt **im selben PR**:
+Jede Änderung, die man im Betrieb des Adapters bemerkt (Funktion, Fehlerbehebung, geänderte oder
+entfernte Datenpunkte, Einstellungen), zieht die Adapter-Version **einmal pro Pull Request** hoch
+(Semantic Versioning, solange < 1.0): neue Funktion oder Breaking Change → Minor, Fehlerbehebung → Patch.
+Reine Änderungen an Entwicklungswerkzeugen ohne Auswirkung auf Nutzer (CI-Workflows, Tests,
+Lint-Konfiguration, Doku, `CLAUDE.md`) brauchen keine neue Version.
 
-1. einen Changelog-Eintrag unter `### **WORK IN PROGRESS**` in `README.md`
-   (`* (Sebastian) Beschreibung`, Breaking Changes mit `**Breaking:**` markieren), und
-2. einen Versionssprung nach Semantic Versioning (solange 0.x):
-   - `patch`: nur Fehlerbehebungen
-   - `minor`: neue Funktionen oder Breaking Changes
+Anzupassen sind jeweils von Hand:
 
-Reine CI-, Test-, Refactoring- oder Doku-Änderungen bekommen keinen Versionssprung.
+- `package.json` und `package-lock.json` (`version` oben und unter `packages[""]`),
+- `io-package.json` (`common.version` und neuer Eintrag oben in `common.news`),
+- der Changelog im `README.md`: neuer Abschnitt `### X.Y.Z (JJJJ-MM-TT)` mit Zeilen
+  `* (Sebastian) Beschreibung`, Breaking Changes mit `**Breaking:**` markieren. Daraus entstehen die
+  Release-Notes, also keinen Platzhalter wie `**WORK IN PROGRESS**` verwenden.
 
-Versionssprung auf einem Feature-Branch:
+Der `common.news`-Eintrag der neuen Version braucht alle 11 Sprachen (en, de, ru, pt, nl, fr, it, es,
+pl, uk, zh-cn), höchstens 20 Einträge behalten. Das prüft der `release-guard` im Pull Request.
 
-```bash
-npx release-script <patch|minor> --yes --noPush --branchPattern 'claude/*'
-git tag -d vX.Y.Z   # Tag nicht pushen, er wird nach dem Merge auf main gesetzt
-```
+## Automatische Tests und Releases (GitHub Actions)
 
-Das Skript fügt danach einen leeren Platzhalter `### **WORK IN PROGRESS**` in
-`README.md` ein; diesen als eigenen Commit mitnehmen.
+`.github/workflows/test.yml` bindet den zentralen Workflow
+`Exc3pt10n/ioBroker-workflows/.github/workflows/adapter.yml@v1` ein (Vorlage: `templates/test.yml` dort):
 
-Das Skript braucht ein sauberes Arbeitsverzeichnis. Ist der Übersetzungsdienst nicht
-erreichbar, die News vorher selbst übersetzt unter `common.news.NEXT` in
-`io-package.json` eintragen (alle Sprachen wie bei den vorhandenen Einträgen); das
-Skript ersetzt `NEXT` durch die neue Version.
+- **Pull Requests:** Lint, Tests auf Node 22 und 24, Integrationstest (echte js-controller-Instanz, stabile
+  Version, simulierter WLAN-Stick), Installationstest wie `iobroker url` (nur ausgelieferte Dateien),
+  `npm audit --omit=dev --audit-level=high` und `release-guard` (Versionsregeln). Ändert ein PR
+  ausgelieferte Dateien (`admin/`, `lib/`, `main.js`, `io-package.json`, `tools/`) oder Laufzeit-Felder in
+  `package.json` bzw. Laufzeit-Pakete im Lockfile, braucht er einen Versionssprung.
+- **Nach dem Merge auf `main`:** Sind alle Prüfungen grün und fehlt der Tag `vX.Y.Z` zur Version in
+  `package.json`, setzt der Release-Job den annotierten Tag, legt ein GitHub-Release mit den Notes aus dem
+  README an und spult den Branch `release` vor.
+- **Wöchentlich und per `workflow_dispatch`:** volle Matrix Linux + Windows, Node 22/24/26.
+  `workflow_dispatch` auf `main` holt außerdem ein abgebrochenes Release nach.
+- **Pflicht-Check** für den Branch-Schutz von `main`: `adapter / ci-result`. Den Branch `release` nicht schützen.
 
-Den Tag `vX.Y.Z` setzt der Workflow `.github/workflows/tag-release.yml` nach dem
-Merge auf `main` automatisch.
+Tags setzt **nur** der Release-Job. Auf Feature-Branches keine Tags pushen; ein versehentlich lokal
+erstellter Tag wird mit `git tag -d vX.Y.Z` wieder gelöscht.
+
+Fehler im zentralen Workflow selbst gehören in das Repo `Exc3pt10n/ioBroker-workflows`.
+
+Wird die Node-Mindestversion geändert: `engines` in `package.json`/`package-lock.json` und README
+(Voraussetzungen) gemeinsam anpassen.
+
+## Installationswege
+
+| Zweck | URL für „Installieren aus eigener URL“ bzw. `iobroker url` |
+|---|---|
+| stabil (letztes Release) | `https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/release` |
+| Entwicklungsstand | `https://github.com/Exc3pt10n/ioBroker.sungrow-local/tarball/main` |
 
 ## Prüfen vor dem Push
 
