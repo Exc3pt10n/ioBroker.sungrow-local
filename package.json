@@ -1,6 +1,6 @@
 {
   "name": "iobroker.sungrow-local",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Sungrow Wechselrichter lokal über Modbus TCP des WLAN-Sticks (inkl. Sungrow-Verschlüsselung)",
   "author": {
     "name": "Sebastian",
@@ -64,6 +64,6 @@
   },
   "readmeFilename": "README.md",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }
